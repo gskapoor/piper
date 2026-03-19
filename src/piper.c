@@ -25,6 +25,13 @@ static uint8_t tiles[4][4] = {
     {0b0010, 0b1011, 0b1010, 0b1001}
 };
 
+uint8_t rotate_tile_once(uint8_t tile){
+    // Counter Clockwise
+    // return (tile << 1) & 0xF + (tile >> 3);
+    // Clockwise for now
+    return ((tile & 1) << 3) + (tile >> 1);
+}
+
 void redraw_pipes(void){
     BeginDrawing();
         ClearBackground(RAYWHITE);
