@@ -5,20 +5,21 @@
 
 #define SQUARE_SIZE 256
 
+#define NORTH 0b0001
+#define EAST  0b0010
+#define SOUTH 0b0100
+#define WEST  0b1000
+
 // Using standard int since calling raylib
 static const int screenWidth = 1024;
 static const int screenHeight = 1024;
 
 // TODO: add details of how I'm storing this
-// For now, first byte represents number of entries, except for "0" which represents a straight pipe
-// Second byte is orientation, indexed by the counterclockwise most open pipe.
-// 0 is up, 1 is right, 2 is down and 3 is left.
-// For straight pipes, 0 is up/down, 1 is right/left
 static uint8_t tiles[4][4] = {
-    {0x11, 0x31, 0x12, 0x12},
-    {0x21, 0x23, 0x00, 0x00},
-    {0x00, 0x21, 0x23, 0x00},
-    {0x11, 0x33, 0x01, 0x23}
+    {0b0100, 0b0111, 0b0010, 0b0010},
+    {0b0110, 0b0011, 0b1010, 0b1010},
+    {0b1010, 0b0110, 0b1001, 0b1010},
+    {0b0100, 0b1101, 0b0101, 0b1001}
 };
 
 int main(int argc, char** argv){
