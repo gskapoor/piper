@@ -27,9 +27,9 @@ static uint8_t tiles[4][4] = {
 
 uint8_t rotate_tile_once(uint8_t tile){
     // Counter Clockwise
-    // return (tile << 1) & 0xF + (tile >> 3);
+    // return ((tile & 1) << 3) + (tile >> 1);
     // Clockwise for now
-    return ((tile & 1) << 3) + (tile >> 1);
+    return ((tile << 1) & 0xF) + (tile >> 3);
 }
 
 void redraw_pipes(void){
@@ -73,6 +73,19 @@ int main(int argc, char** argv){
 
     while(!WindowShouldClose()){
         PollInputEvents();
+        
+        // Check for mouse input
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+            int mouse_x = GetMouseX();
+            int mouse_y = GetMouseY();
+
+            int col = mouse_x / SQUARE_SIZE;
+            int row = mouse_y / SQUARE_SIZE;
+
+            tiles[row][col] = rotate_tile_once(tiles[row][col]);
+
+            redraw_pipes();
+        }
     }
     CloseWindow();
     
