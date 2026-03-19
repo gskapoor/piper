@@ -18,10 +18,16 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
-.PHONY: all clean run
+.PHONY: all clean run debug release
 
 clean:
 	rm -rf $(OBJ_DIR) $(TARGET)
 
 run: $(TARGET)
 	./$(TARGET)
+
+debug: CFLAGS += -g -DDEBUG
+debug: $(TARGET)
+
+release: CFLAGS += -O2
+release: $(TARGET)
