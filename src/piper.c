@@ -31,7 +31,7 @@ int main(int argc, char** argv){
             for (int j = 0; j < 4; j++){
                 char buf[1];
                 sprintf(buf,"%d", tiles[i][j]);
-                DrawText(buf, i * SQUARE_SIZE, j * SQUARE_SIZE, 5, ORANGE);
+                DrawText(buf, i * SQUARE_SIZE, j * SQUARE_SIZE, SQUARE_SIZE, ORANGE);
             }
         }
     EndDrawing();
