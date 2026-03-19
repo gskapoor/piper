@@ -19,37 +19,50 @@ static const int pipeOffset = pipeWidth / 2;
 
 // TODO: add details of how I'm storing this
 static uint8_t tiles[4][4] = {
-    {0b0100, 0b1110, 0b0010, 0b0010},
+    {0b0010, 0b1110, 0b1100, 0b0100},
     {0b0110, 0b1001, 0b0101, 0b0101},
     {0b0001, 0b0110, 0b1001, 0b0101},
     {0b0010, 0b1011, 0b1010, 0b1001}
 };
 
-int main(int argc, char** argv){
-    InitWindow(screenWidth, screenHeight, "Piper");
-
+void redraw_pipes(void){
     BeginDrawing();
         ClearBackground(RAYWHITE);
         for (int i = 0; i < 4; i++){
             for (int j = 0; j < 4; j++){
-                char buf[1];
-                sprintf(buf,"%d", tiles[i][j]);
-                DrawText(buf, j * SQUARE_SIZE, i * SQUARE_SIZE, SQUARE_SIZE, ORANGE);
-                // DrawRectangle(i * SQUARE_SIZE, j * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE, GRAY);
-                // DrawRectangle(i * SQUARE_SIZE + 16, j * SQUARE_SIZE + 16, SQUARE_SIZE - 32, SQUARE_SIZE - 32, GREEN);
+                // char buf[1];
+                // sprintf(buf,"%d", tiles[i][j]);
+                // DrawText(buf, j * SQUARE_SIZE, i * SQUARE_SIZE, SQUARE_SIZE, ORANGE);
 
-                // int center_x = i * SQUARE_SIZE + SQUARE_SIZE / 2;
-                // int center_y = j * SQUARE_SIZE + SQUARE_SIZE / 2;
+                DrawRectangle(j * SQUARE_SIZE, i * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE, GRAY);
+                DrawRectangle(j * SQUARE_SIZE + 16, i * SQUARE_SIZE + 16, SQUARE_SIZE - 32, SQUARE_SIZE - 32, GREEN);
 
-                // if (tiles[i][j] & NORTH){
-                //     DrawRectangle(center_x - pipeOffset, j * SQUARE_SIZE, pipeWidth, SQUARE_SIZE / 2, ORANGE);
-                // } 
-                // if (tiles[i][j] & SOUTH){
-                //     DrawRectangle(center_x - pipeOffset, center_y, pipeWidth, SQUARE_SIZE / 2, ORANGE);
-                // }
+                int center_x = j * SQUARE_SIZE + SQUARE_SIZE / 2;
+                int center_y = i * SQUARE_SIZE + SQUARE_SIZE / 2;
+
+                if (tiles[i][j] & NORTH){
+                    DrawRectangle(center_x - pipeOffset, i * SQUARE_SIZE, pipeWidth, SQUARE_SIZE / 2 + pipeOffset, ORANGE);
+                } 
+                if (tiles[i][j] & SOUTH){
+                    DrawRectangle(center_x - pipeOffset, center_y - pipeOffset, pipeWidth, SQUARE_SIZE / 2 + pipeOffset, ORANGE);
+                }
+                if (tiles[i][j] & EAST){
+                    DrawRectangle(center_x - pipeOffset, center_y - pipeOffset, SQUARE_SIZE / 2 + pipeOffset, pipeWidth, ORANGE);
+                }
+                if (tiles[i][j] & WEST){
+                    DrawRectangle(j * SQUARE_SIZE, center_y - pipeOffset, SQUARE_SIZE / 2 + pipeOffset, pipeWidth, ORANGE);
+                }
             }
         }
     EndDrawing();
+
+
+}
+
+int main(int argc, char** argv){
+    InitWindow(screenWidth, screenHeight, "Piper");
+
+    redraw_pipes();
 
     while(!WindowShouldClose()){
         PollInputEvents();
