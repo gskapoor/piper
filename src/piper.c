@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "raylib.h"
 
@@ -108,6 +109,10 @@ void redraw_pipes(uint8_t** tiles){
 }
 
 int main(int argc, char** argv){
+
+    // I sure love pseudo random numbers
+    srand(time(NULL));
+
     InitWindow(screenWidth, screenHeight, "Piper");
 
     uint8_t m = 4, n = 4;
