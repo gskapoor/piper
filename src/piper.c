@@ -5,7 +5,7 @@
 
 #include "raylib.h"
 
-#define SQUARE_SIZE 256
+#define SQUARE_SIZE 128
 
 #define NORTH 0b0001
 #define EAST  0b0010
@@ -13,8 +13,8 @@
 #define WEST  0b1000
 
 // Using standard int since calling raylib
-static const int screenWidth = 1024;
-static const int screenHeight = 1024;
+// static const int screenWidth = 1024;
+// static const int screenHeight = 1024;
 
 static const int pipeWidth = SQUARE_SIZE / 4;
 static const int pipeOffset = pipeWidth / 2;
@@ -59,11 +59,30 @@ bool tile_has_triple_entry(uint8_t tile){
 
 // Tilemap creation
 // Assume an "empty" tilemap is calloced to 0
-void generate_tilemap(uint8_t** tilemap, uint8_t m, uint8_t n){
+void generate_tilemap(uint8_t** tilemap, uint8_t n, uint8_t m){
     for (int row = 0; row < m; row++){
         for (int col = 0; col < n; col++){
-            tilemap[row][col] = NORTH | SOUTH;
+            uint8_t randmask = (rand() % 14) + 1;
+            uint8_t not_mask = 0x0;
+            uint8_t required_mask = 0x0;
+
+            // First check north
+            if (row == 0 || ! (tilemap[row-1][col] & SOUTH)){
+                not_mask |= NORTH;
+            } else {
+                required_mask |= NORTH;
+            }
+
+            if (col == 0 || ! (tilemap[row][col-1] & EAST)){
+                not_mask |= WEST;
+            } else {
+                required_mask |= WEST;
+            }
+
+            tilemap[row][col] = (randmask & (~not_mask)) | required_mask;
+            // printf("%d, %d ;", tilemap[row][col], randmask);
         }
+        // printf("\n");
     }
 }
 
@@ -74,17 +93,19 @@ uint8_t rotate_tile_once(uint8_t tile){
     return ((tile << 1) & 0xF) + (tile >> 3);
 }
 
-void redraw_pipes(uint8_t** tiles){
+void redraw_pipes(uint8_t** tiles, uint8_t width, uint8_t height){
     BeginDrawing();
         ClearBackground(RAYWHITE);
-        for (int i = 0; i < 4; i++){
-            for (int j = 0; j < 4; j++){
+        for (int i = 0; i < height; i++){
+            printf("ROW %d: ", i);
+            for (int j = 0; j < width; j++){
+                printf("%d ", j);
                 // char buf[1];
                 // sprintf(buf,"%d", tiles[i][j]);
                 // DrawText(buf, j * SQUARE_SIZE, i * SQUARE_SIZE, SQUARE_SIZE, ORANGE);
 
                 DrawRectangle(j * SQUARE_SIZE, i * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE, GRAY);
-                DrawRectangle(j * SQUARE_SIZE + 16, i * SQUARE_SIZE + 16, SQUARE_SIZE - 32, SQUARE_SIZE - 32, GREEN);
+                DrawRectangle(j * SQUARE_SIZE + 4, i * SQUARE_SIZE + 4, SQUARE_SIZE - 8, SQUARE_SIZE - 8, GREEN);
 
                 int center_x = j * SQUARE_SIZE + SQUARE_SIZE / 2;
                 int center_y = i * SQUARE_SIZE + SQUARE_SIZE / 2;
@@ -102,6 +123,7 @@ void redraw_pipes(uint8_t** tiles){
                     DrawRectangle(j * SQUARE_SIZE, center_y - pipeOffset, SQUARE_SIZE / 2 + pipeOffset, pipeWidth, ORANGE);
                 }
             }
+            printf("\n");
         }
     EndDrawing();
 
@@ -113,18 +135,19 @@ int main(int argc, char** argv){
     // I sure love pseudo random numbers
     srand(time(NULL));
 
-    InitWindow(screenWidth, screenHeight, "Piper");
 
-    uint8_t m = 4, n = 4;
+    uint8_t m = 4, n = 16;
+    
+    InitWindow(n * SQUARE_SIZE, m * SQUARE_SIZE, "Piper");
 
     uint8_t **tiles = malloc(m * sizeof(uint8_t *));
     for (int i = 0; i < m; i++)
         tiles[i] = malloc(n * sizeof(uint8_t));
 
 
-    generate_tilemap(tiles, 4, 4);
+    generate_tilemap(tiles, n, m);
 
-    redraw_pipes(tiles);
+    redraw_pipes(tiles, n, m);
 
     while(!WindowShouldClose()){
         PollInputEvents();
@@ -139,9 +162,14 @@ int main(int argc, char** argv){
 
             tiles[row][col] = rotate_tile_once(tiles[row][col]);
 
-            redraw_pipes(tiles);
+            redraw_pipes(tiles, n, m);
         }
     }
+
+    for (int i = 0; i < m; i++){
+        free(tiles[i]);
+    }
+    free(tiles);
     CloseWindow();
     
     return 0;
