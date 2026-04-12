@@ -9,13 +9,13 @@ LDFLAGS = -lraylib -lm -lpthread -ldl -lX11
 TARGET = piper
 SRC_DIR = src
 OBJ_DIR = obj
-TEST_DIR = tests
-TEST_OBJ_DIR = $(OBJ_DIR)/tests
+TEST_DIR = test
+TEST_OBJ_DIR = $(OBJ_DIR)/test
 
 SRCS = $(wildcard $(SRC_DIR)/*.c)
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
-LIB_OBJS = $(filter-out $(OBJ_DIR)/main.o, $(OBJS))
+LIB_OBJS = $(filter-out $(OBJ_DIR)/piper.o, $(OBJS))
 
 TEST_SRCS = $(wildcard $(TEST_DIR)/*.c)
 TEST_BINS = $(patsubst $(TEST_DIR)/%.c, $(TEST_OBJ_DIR)/%, $(TEST_SRCS))
