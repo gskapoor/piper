@@ -75,6 +75,11 @@ void* get(array arr, size_t index){
     return (arr.internal_array + index * arr.element_size);
 }
 
+void decrease_array_size(array* arr, size_t elems_to_remove){
+    // TODO: consider shrinking the pointer too?
+    arr->array_size -= elems_to_remove;
+}
+
 void array_destroy(array* arr){
     free(arr->internal_array);
     arr->internal_array = NULL;
