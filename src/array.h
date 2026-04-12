@@ -1,6 +1,7 @@
 #ifndef ARRAY_H 
 #define ARRAY_H
 
+#include <assert.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdbool.h>
