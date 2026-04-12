@@ -20,6 +20,10 @@ array create_array(size_t element_size);
 array create_array_from_carray(size_t element_size, void* array_ptr, size_t array_size);
 array create_array_from_array(array arr);
 
+void append_many(array* arr, void* elems, size_t elems_size);
+void append(array* arr, void* elem);
+void* get(array arr, size_t index);
+
 void array_destroy(array* arr);
 
 #endif
