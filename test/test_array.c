@@ -5,10 +5,12 @@ int main(){
     // test create
 
     printf("Beginning Array Tests: \n");
-    printf("=======================\n");
+    printf("=======================\n\n");
     array arr = create_array(sizeof(int));
 
     // test append
+
+    printf("Creating array [0..9]\n");
     for (int i = 0; i < 10; i++)
         append(&arr, &i);
 
@@ -16,15 +18,15 @@ int main(){
     assert(arr.array_size == 10);
     // test get
     printf("Testing Getting each element\n");
-    printf("[");
+    printf("Custom array: [");
     for (size_t i = 0; i < arr.array_size; i++){
         // Fucking shouldn't work
         size_t res = *(int*)get(arr, i);
         assert(i == res);
         if (i == 0){
-            printf("%d", res);
+            printf("%ld", res);
         } else {
-            printf(", %d", res);
+            printf(", %ld", res);
         }
     }
     printf("]\n");
