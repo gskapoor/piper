@@ -5,6 +5,8 @@
 
 #include "raylib.h"
 
+#include "priority_queue.h"
+
 #define SQUARE_SIZE 128
 
 #define NORTH 0b0001
@@ -97,12 +99,9 @@ void redraw_pipes(uint8_t** tiles, uint8_t width, uint8_t height){
     BeginDrawing();
         ClearBackground(RAYWHITE);
         for (int i = 0; i < height; i++){
-            printf("ROW %d: ", i);
+            // printf("ROW %d: ", i);
             for (int j = 0; j < width; j++){
-                printf("%d ", j);
-                // char buf[1];
-                // sprintf(buf,"%d", tiles[i][j]);
-                // DrawText(buf, j * SQUARE_SIZE, i * SQUARE_SIZE, SQUARE_SIZE, ORANGE);
+                // printf("%d ", j);
 
                 DrawRectangle(j * SQUARE_SIZE, i * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE, GRAY);
                 DrawRectangle(j * SQUARE_SIZE + 4, i * SQUARE_SIZE + 4, SQUARE_SIZE - 8, SQUARE_SIZE - 8, GREEN);
@@ -123,7 +122,7 @@ void redraw_pipes(uint8_t** tiles, uint8_t width, uint8_t height){
                     DrawRectangle(j * SQUARE_SIZE, center_y - pipeOffset, SQUARE_SIZE / 2 + pipeOffset, pipeWidth, ORANGE);
                 }
             }
-            printf("\n");
+            // printf("\n");
         }
     EndDrawing();
 
