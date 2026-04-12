@@ -70,6 +70,7 @@ void append(array* arr, void* elem){
     append_many(arr, elem, 1);
 }
 
+// Note: this function returns a reference, if the array is deallocated so is this
 void* get(array arr, size_t index){
     assert(index < arr.array_size);
     return (arr.internal_array + index * arr.element_size);
@@ -78,6 +79,19 @@ void* get(array arr, size_t index){
 void decrease_array_size(array* arr, size_t elems_to_remove){
     // TODO: consider shrinking the pointer too?
     arr->array_size -= elems_to_remove;
+}
+
+void pop(array* arr, void* out){
+    // We can't guarantee that the element will exist in memory after we pop it
+    memcpy(
+        out, 
+        arr->internal_array + (arr->array_size - 1) * arr->element_size, 
+        arr->element_size
+    );
+
+    decrease_array_size(arr, 1);
+
+    return;
 }
 
 void array_destroy(array* arr){

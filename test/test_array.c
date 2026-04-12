@@ -34,9 +34,14 @@ int main(){
             printf(", %ld", res);
         }
     }
-    printf("]\n");
+    printf("]\n\n");
 
-    // test pop, etc...
+    printf("Testing Pop, expecting to get 8: \n");
+    int popped_val;
+    pop(&arr, &popped_val);
+    printf("Got %d, array is now of length %ld \n\n", popped_val, arr.array_size);
+    assert(popped_val == 8);
+    assert(arr.array_size == 8);
 
     array_destroy(&arr);
 

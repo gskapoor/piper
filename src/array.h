@@ -24,7 +24,8 @@ void append_many(array* arr, void* elems, size_t elems_size);
 void append(array* arr, void* elem);
 void* get(array arr, size_t index);
 
-void decrese_array_size(array* arr, size_t elems_to_remove);
+void decrease_array_size(array* arr, size_t elems_to_remove);
+void pop(array* arr, void* out);
 
 void array_destroy(array* arr);
 
