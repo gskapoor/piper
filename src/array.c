@@ -62,6 +62,8 @@ void append_many(array* arr, void* elems, size_t elems_size){
         elems, 
         elems_size * arr->element_size
     );
+
+    arr->array_size += elems_size;
 }
 
 void append(array* arr, void* elem){
