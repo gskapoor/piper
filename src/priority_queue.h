@@ -13,4 +13,8 @@ typedef struct {
     array arr;
 } prio_queue;
 
+prio_queue create_prio_queue();
+
+void destroy_prio_queue(prio_queue* prio_queue);
+
 #endif
