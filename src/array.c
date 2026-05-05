@@ -50,7 +50,7 @@ void append_many(array* arr, void* elems, size_t elems_size){
         expand = true;
     }
     if (expand){
-        void* new_ptr = realloc(arr->internal_array, arr->internal_array_size);
+        void* new_ptr = realloc(arr->internal_array, arr->internal_array_size * arr->element_size);
         if (new_ptr == NULL){
             return;
         }
