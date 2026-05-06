@@ -20,6 +20,10 @@ int main(){
         pnode.item = get(arr, i);
         pnode.weight = i;
         push(&p, pnode);
+
+        int top = 21;
+        prio_top(&p, &top, sizeof(int));
+        assert(i == top);
     }
    
     printf("Making sure there are 10 items in prio queue\n");
@@ -31,6 +35,7 @@ int main(){
     prio_top(&p, &top, sizeof(int));
     printf("Actual value: %d\n", top);
     assert(top == 0);
+    printf("Passed!! \n\n");
 
     destroy_prio_queue(&p);
     array_destroy(&arr);
