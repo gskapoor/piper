@@ -17,8 +17,8 @@ prio_queue create_prio_queue();
 
 void push(prio_queue* prio, prio_nodes prio_node);
 
-void prio_pop(prio_queue* prio_queue, void* res);
-void prio_top(prio_queue* prio_queue, void* res);
+void prio_pop(prio_queue* prio_queue, void* res, size_t element_size);
+void prio_top(prio_queue* prio_queue, void* res, size_t element_size);
 
 void destroy_prio_queue(prio_queue* prio_queue);
 

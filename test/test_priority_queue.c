@@ -9,11 +9,32 @@ int main(){
 
     printf("Creating prio queue\n\n");
     prio_queue p = create_prio_queue();
-    
-    // assert(p.arr.array_size == 10);
+
+    array arr = create_array(sizeof(int));
+    for (int i = 0; i < 10; i++){
+        append(&arr, &i);
+    }
+
+    for (int i = 9; i >= 0; i--){
+        prio_nodes pnode;
+        pnode.item = get(arr, i);
+        pnode.weight = i;
+        push(&p, pnode);
+    }
+   
+    printf("Making sure there are 10 items in prio queue\n");
+    assert(p.arr.array_size == 10);
+    printf("Confirmed\n\n");
+
+    printf("Checking top of pqueue is 0\n");
+    int top;
+    prio_top(&p, &top, sizeof(int));
+    printf("Actual value: %d\n", top);
+    assert(top == 0);
 
     destroy_prio_queue(&p);
+    array_destroy(&arr);
 
-    printf("End of Array Tests\n");
+    printf("End of Priority Queue Tests\n");
     return 0;
 }
