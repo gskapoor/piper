@@ -38,6 +38,40 @@ void reorganize_from_bottom(prio_queue* prio){
     }
 }
 
+void reorganize_from_top(prio_queue* prio){
+    size_t index = 0;
+    size_t child = 0;
+    // while the index has a child
+    while (left_child_index(index) < prio->arr.array_size){
+        if (get_prio_node(prio, index).weight > get_prio_node(prio, left_child_index(index)).weight){
+            if (right_child_index(index) < prio->arr.array_size && get_prio_node(prio, left_child_index(index)).weight > get_prio_node(prio, right_child_index(index)).weight){
+                child = right_child_index(index);
+            } else {
+                child = left_child_index(index);
+            }
+
+            prio_nodes tmp = *(prio_nodes*)get(prio->arr, index);
+            *(prio_nodes*)get(prio->arr, index) = *(prio_nodes*)get(prio->arr, child);
+            *(prio_nodes*)get(prio->arr, child) = tmp;
+
+            index = child;
+
+        } else if (right_child_index(index) < prio->arr.array_size && get_prio_node(prio, index).weight > get_prio_node(prio, right_child_index(index)).weight){
+            child = right_child_index(index);
+            
+            prio_nodes tmp = *(prio_nodes*)get(prio->arr, index);
+            *(prio_nodes*)get(prio->arr, index) = *(prio_nodes*)get(prio->arr, child);
+            *(prio_nodes*)get(prio->arr, child) = tmp;
+
+            index = child;
+
+
+        } else {
+            return;
+        }
+    }
+}
+
 void push(prio_queue* prio, prio_nodes prio_node){
     // prio->arr
     append(&(prio->arr), &prio_node);
@@ -47,6 +81,15 @@ void push(prio_queue* prio, prio_nodes prio_node){
 void prio_top(prio_queue* prio_queue, void* res, size_t element_size){
     prio_nodes prio_top = *(prio_nodes*)get(prio_queue->arr, 0);
     memcpy(res, prio_top.item, element_size);
+}
+
+void prio_pop(prio_queue* prio_queue, void* res, size_t element_size){
+    prio_top(prio_queue, res, element_size);
+
+    // make the top of the tree the bottom most element
+    *(prio_nodes*)get(prio_queue->arr, 0) = *(prio_nodes*)get(prio_queue->arr, prio_queue->arr.array_size - 1);
+
+    reorganize_from_top(prio_queue);
 }
 
 void destroy_prio_queue(prio_queue* prio){

@@ -37,6 +37,14 @@ int main(){
     assert(top == 0);
     printf("Passed!! \n\n");
 
+    printf("Checking pop is 1\n");
+    prio_pop(&p, &top, sizeof(int));
+    prio_pop(&p, &top, sizeof(int));
+    assert(top == 1);
+    prio_pop(&p, &top, sizeof(int));
+    assert(top == 2);
+    printf("Passed!!\n\n");
+
     destroy_prio_queue(&p);
     array_destroy(&arr);
 
