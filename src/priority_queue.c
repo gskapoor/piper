@@ -1,9 +1,14 @@
 #include "priority_queue.h"
 
-prio_queue create_prio_queue(){
+void destroy_prio_node(prio_nodes n){
+    free(n.item);
+}
+
+prio_queue create_prio_queue(size_t element_size){
     array arr = create_array(sizeof(prio_nodes));
     prio_queue prio;
     prio.arr = arr;
+    prio.element_size = element_size;
     return prio;
 }
 
@@ -22,6 +27,12 @@ size_t right_child_index(size_t node_index){
 
 prio_nodes get_prio_node(prio_queue* prio, size_t index){
     return *(prio_nodes*)get(prio->arr, index);
+}
+
+void remove_last_node(prio_queue* prio){
+    free(get_prio_node(prio, prio->arr.array_size - 1).item);
+
+    decrease_array_size(&prio->arr, 1);
 }
 
 void reorganize_from_bottom(prio_queue* prio){
@@ -72,26 +83,43 @@ void reorganize_from_top(prio_queue* prio){
     }
 }
 
-void push(prio_queue* prio, prio_nodes prio_node){
+void push(prio_queue* prio, void* item, uint32_t weight){
     // prio->arr
-    append(&(prio->arr), &prio_node);
+
+    prio_nodes node;
+
+    node.item = malloc(prio->element_size);
+    memcpy(node.item, item, prio->element_size);
+    node.weight = weight;
+    
+    append(&(prio->arr), &node);
     reorganize_from_bottom(prio);
 }
 
-void prio_top(prio_queue* prio_queue, void* res, size_t element_size){
+void prio_top(prio_queue* prio_queue, void* res){
     prio_nodes prio_top = *(prio_nodes*)get(prio_queue->arr, 0);
-    memcpy(res, prio_top.item, element_size);
+    memcpy(res, prio_top.item, prio_queue->element_size);
 }
 
-void prio_pop(prio_queue* prio_queue, void* res, size_t element_size){
-    prio_top(prio_queue, res, element_size);
+void prio_pop(prio_queue* prio_queue, void* res){
+    prio_top(prio_queue, res);
 
     // make the top of the tree the bottom most element
+    // Swap to deallocate the head's pointer (I hate memory leaks)
+    prio_nodes tmp = *(prio_nodes*)get(prio_queue->arr, 0);
     *(prio_nodes*)get(prio_queue->arr, 0) = *(prio_nodes*)get(prio_queue->arr, prio_queue->arr.array_size - 1);
+    *(prio_nodes*)get(prio_queue->arr, prio_queue->arr.array_size - 1) = tmp;
 
-    reorganize_from_top(prio_queue);
+    remove_last_node(prio_queue);
+
+    if (prio_queue->arr.array_size > 0){
+        reorganize_from_top(prio_queue);
+    }
 }
 
 void destroy_prio_queue(prio_queue* prio){
+    for (size_t i = 0; i < prio->arr.array_size; i++){
+        free(get_prio_node(prio, i).item);
+    }
     array_destroy(&(prio->arr));
 }

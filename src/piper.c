@@ -14,6 +14,12 @@
 #define SOUTH 0b0100
 #define WEST  0b1000
 
+typedef struct vector {
+    size_t row;
+    size_t col;
+    uint8_t dir;
+} vector;
+
 // Using standard int since calling raylib
 // static const int screenWidth = 1024;
 // static const int screenHeight = 1024;
@@ -62,6 +68,14 @@ bool tile_has_triple_entry(uint8_t tile){
 // Tilemap creation
 // Assume an "empty" tilemap is calloced to 0
 void generate_tilemap(uint8_t** tilemap, uint8_t n, uint8_t m){
+
+    bool found[m][n]; 
+    for (int i = 0; i < m; i++){
+        for (int j = 0; j < n; j++){
+            found[i][j] = false;
+        }
+    }
+
     for (int row = 0; row < m; row++){
         for (int col = 0; col < n; col++){
             uint8_t randmask = (rand() % 14) + 1;
